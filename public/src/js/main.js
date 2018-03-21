@@ -13,9 +13,16 @@ const appendToDataLog = (textContent) => {
 
 const checkWeather = () => {
   const cityName = document.querySelector('#searchBar').value;
-  console.log('checking for city:', cityName);
+  
+  let fetchMe;
+  if (isNaN(cityName)) {
+    console.log('checking for city:', cityName);
+    fetchMe = `${siteHead}q=${cityName}${apiArg()}`;
+  } else {
+    console.log('checking for zip:', cityName);
+    fetchMe = `${siteHead}zip=${cityName}${apiArg()}`;
+  }
 
-  const fetchMe = `${siteHead}q=${cityName}${apiArg()}`;
   console.log('fetching:', fetchMe);
 
   const handleResponse = (response) => {
@@ -28,7 +35,7 @@ const checkWeather = () => {
 
   const handleData = (data) => {
     console.log('data:', data);
-    appendToDataLog(data.name);
+    appendToDataLog(`${data.name} -- Temp: ${((9 / 5) * (data.main.temp - 273) + 32).toFixed(2)} \u00b0F`);
   };
 
   fetch(fetchMe).then(handleResponse).then(handleData);
