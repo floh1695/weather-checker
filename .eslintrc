@@ -2,5 +2,9 @@
   "extends": [
     "standard"
   ],
-  "rules": {}
+  "rules": {
+    "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
+    "space-before-function-paren": "off",
+    "indent": "off"
+  }
 }
