@@ -27,3 +27,8 @@
     align-items: center;
     flex-grow: 1;
 }
+
+.data-log {
+  display: flex;
+  flex-direction: column-reverse;
+}
