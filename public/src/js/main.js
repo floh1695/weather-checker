@@ -1,8 +1,5 @@
 const API_URL = 'http://api.openweathermap.org/data/2.5/weather?';
 const API_KEY = 'f4d19a80c743b8354ac723b2953fa90b';
-const apiArg = () => {
-  return `&appid=${API_KEY}`;
-};
 
 const appendToDataLog = (textContent) => {
   const dataLog = document.querySelector('#dataLog');
@@ -11,17 +8,26 @@ const appendToDataLog = (textContent) => {
   dataLog.appendChild(_p);
 };
 
+const apiCommandFromMap = (map) => {
+  let command = API_URL;
+  const mapClone = Object.assign({appid: API_KEY}, map);
+  const commandArray = [];
+  for (let property in mapClone) {
+    commandArray.push(`${property}=${mapClone[property]}`);
+  }
+  return command + commandArray.join('&');
+};
+
 const generateApiCommand = (searchQuery) => {
-  let fetchMe = API_URL;
+  const fetchMap = {};
   if (isNaN(searchQuery)) {
     console.log('checking for city:', searchQuery);
-    fetchMe += 'q=' + searchQuery;
+    fetchMap['q'] = searchQuery;
   } else {
     console.log('checking for zip:', searchQuery);
-    fetchMe += 'zip=' + searchQuery;
+    fetchMap['zip'] = searchQuery;
   }
-  fetchMe += apiArg();
-  return fetchMe;
+  return apiCommandFromMap(fetchMap);
 };
 
 const checkWeather = () => {
