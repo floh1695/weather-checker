@@ -1,7 +1,7 @@
-const siteHead = 'http://api.openweathermap.org/data/2.5/weather?';
-const apiKey = 'f4d19a80c743b8354ac723b2953fa90b';
+const API_URL = 'http://api.openweathermap.org/data/2.5/weather?';
+const API_KEY = 'f4d19a80c743b8354ac723b2953fa90b';
 const apiArg = () => {
-  return `&appid=${apiKey}`;
+  return `&appid=${API_KEY}`;
 };
 
 const appendToDataLog = (textContent) => {
@@ -11,25 +11,29 @@ const appendToDataLog = (textContent) => {
   dataLog.appendChild(_p);
 };
 
+const generateApiCommand = (searchQuery) => {
+  let fetchMe = API_URL;
+  if (isNaN(searchQuery)) {
+    console.log('checking for city:', searchQuery);
+    fetchMe += 'q=' + searchQuery;
+  } else {
+    console.log('checking for zip:', searchQuery);
+    fetchMe += 'zip=' + searchQuery;
+  }
+  fetchMe += apiArg();
+  return fetchMe;
+};
+
 const checkWeather = () => {
   const cityName = document.querySelector('#searchBar').value;
-  
-  let fetchMe;
-  if (isNaN(cityName)) {
-    console.log('checking for city:', cityName);
-    fetchMe = `${siteHead}q=${cityName}${apiArg()}`;
-  } else {
-    console.log('checking for zip:', cityName);
-    fetchMe = `${siteHead}zip=${cityName}${apiArg()}`;
-  }
+  let fetchMe = generateApiCommand(cityName);
 
   console.log('fetching:', fetchMe);
-
   const handleResponse = (response) => {
     if (response.status === 200) {
       return response.json();
     } else {
-      console.warn('Response failed');
+      console.warn('Response failed:', response.status);
     }
   };
 
